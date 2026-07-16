@@ -36,7 +36,7 @@ export default function Login() {
     try {
       await login(businessId.trim(), email.trim(), password);
       localStorage.setItem('bs_last_business_id', businessId.trim());
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message);
     } finally {

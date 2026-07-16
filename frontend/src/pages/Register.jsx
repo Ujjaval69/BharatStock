@@ -66,7 +66,7 @@ export default function Register() {
             <div className="credential-note" style={{ fontSize: 16, textAlign: 'center', margin: '20px 0', transform: 'translateZ(30px)' }}>
               Business ID: <strong style={{ fontFamily: 'var(--font-mono)' }}>{createdId}</strong>
             </div>
-            <button className="btn btn-primary" style={{ width: '100%', transform: 'translateZ(20px)' }} onClick={() => navigate('/')}>
+            <button className="btn btn-primary" style={{ width: '100%', transform: 'translateZ(20px)' }} onClick={() => navigate('/dashboard')}>
               Go to dashboard
             </button>
           </div>
