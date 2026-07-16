@@ -29,66 +29,101 @@ export default function Register() {
 
   if (createdId) {
     return (
-      <div className="auth-shell">
-        <div className="auth-card">
-          <h1 className="auth-brand">You're set up</h1>
-          <p className="auth-tagline">Save your Business ID — you'll need it to log in next time.</p>
-          <div className="credential-note">Business ID: {createdId}</div>
-          <button className="btn btn-primary" style={{ width: '100%', marginTop: 20 }} onClick={() => navigate('/')}>
-            Go to dashboard
-          </button>
+      <div className="auth-container">
+        <div className="auth-form-side" style={{ flex: 1 }}>
+          <div className="auth-card">
+            <h1 className="auth-brand">You're set up!</h1>
+            <p className="auth-tagline">Save your Business ID — you'll need it to log in next time.</p>
+            <div className="credential-note" style={{ fontSize: 16, textAlign: 'center', margin: '20px 0' }}>
+              Business ID: <strong style={{ fontFamily: 'var(--font-mono)' }}>{createdId}</strong>
+            </div>
+            <button className="btn btn-primary" style={{ width: '100%' }} onClick={() => navigate('/')}>
+              Go to dashboard
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="auth-shell">
-      <div className="auth-card">
-        <h1 className="auth-brand">Open your shop</h1>
-        <p className="auth-tagline">Set up BharatStock for your business in a minute.</p>
+    <div className="auth-container">
+      <div className="auth-visual-side">
+        <div className="auth-visual-content">
+          <h2 className="auth-visual-title">
+            Open your shop<br />
+            <span>in seconds.</span>
+          </h2>
+          <p style={{ color: '#94a3b8', fontSize: '15px', lineHeight: '1.5', margin: 0 }}>
+            Create your store ledger, customize your stock limits, and start generating professional GST tax receipts.
+          </p>
 
-        {error ? <div className="error-banner">{error}</div> : null}
+          <div className="auth-visual-features">
+            <div className="auth-feature-item">
+              <div className="auth-feature-icon">🏪</div>
+              <div className="auth-feature-text">
+                <h4>Multi-tenant Isolation</h4>
+                <p>Your products, customer CRM, and billing logs are kept strictly secure and private.</p>
+              </div>
+            </div>
+            <div className="auth-feature-item">
+              <div className="auth-feature-icon">🛡️</div>
+              <div className="auth-feature-text">
+                <h4>Data Ownership</h4>
+                <p>Save business details, GSTIN, and local stock configurations directly.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="field">
-            <label htmlFor="businessName">Shop name</label>
-            <input id="businessName" value={form.businessName} onChange={update('businessName')} required />
-          </div>
-          <div className="field">
-            <label htmlFor="ownerName">Your name</label>
-            <input id="ownerName" value={form.ownerName} onChange={update('ownerName')} required />
-          </div>
-          <div className="field">
-            <label htmlFor="city">City</label>
-            <input id="city" value={form.city} onChange={update('city')} />
-          </div>
-          <div className="field">
-            <label htmlFor="email">Email</label>
-            <input id="email" type="email" value={form.email} onChange={update('email')} required />
-          </div>
-          <div className="field">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={form.password}
-              onChange={update('password')}
-              minLength={6}
-              required
-            />
-          </div>
-          <button className="btn btn-primary" type="submit" disabled={submitting} style={{ width: '100%' }}>
-            {submitting ? 'Creating…' : 'Create shop account'}
-          </button>
-        </form>
+      <div className="auth-form-side">
+        <div className="auth-card">
+          <h1 className="auth-brand">Register</h1>
+          <p className="auth-tagline">Set up BharatStock for your shop in a minute.</p>
 
-        <p className="auth-switch">
-          Already registered?{' '}
-          <button type="button" onClick={() => navigate('/login')}>
-            Sign in
-          </button>
-        </p>
+          {error ? <div className="error-banner">{error}</div> : null}
+
+          <form onSubmit={handleSubmit}>
+            <div className="field">
+              <label htmlFor="businessName">Shop name</label>
+              <input id="businessName" value={form.businessName} onChange={update('businessName')} required />
+            </div>
+            <div className="field">
+              <label htmlFor="ownerName">Your name</label>
+              <input id="ownerName" value={form.ownerName} onChange={update('ownerName')} required />
+            </div>
+            <div className="field">
+              <label htmlFor="city">City</label>
+              <input id="city" value={form.city} onChange={update('city')} />
+            </div>
+            <div className="field">
+              <label htmlFor="email">Email</label>
+              <input id="email" type="email" value={form.email} onChange={update('email')} required />
+            </div>
+            <div className="field">
+              <label htmlFor="password">Password</label>
+              <input
+                id="password"
+                type="password"
+                value={form.password}
+                onChange={update('password')}
+                minLength={6}
+                required
+              />
+            </div>
+            <button className="btn btn-primary" type="submit" disabled={submitting} style={{ width: '100%' }}>
+              {submitting ? 'Creating…' : 'Create shop account'}
+            </button>
+          </form>
+
+          <p className="auth-switch">
+            Already registered?{' '}
+            <button type="button" onClick={() => navigate('/login')}>
+              Sign in
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );
