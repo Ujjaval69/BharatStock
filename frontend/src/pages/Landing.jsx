@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -6,15 +7,88 @@ function formatINR(amount) {
 }
 
 export default function Landing() {
-  const { user, business } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const isLoggedIn = !!user;
+
+  // 1. FAQ Accordion State
+  const [activeFaq, setActiveFaq] = useState(null);
+  const toggleFaq = (index) => {
+    setActiveFaq((prev) => (prev === index ? null : index));
+  };
+
+  // 2. Interactive Mockup State
+  const [mockProducts, setMockProducts] = useState([
+    { id: '1', name: 'Basmati Rice (Premium)', stock: 120, unit: 'kg', price: 95, status: 'success', statusText: '120 kg in stock' },
+    { id: '2', name: 'Fortune Mustard Oil', stock: 2, unit: 'L', price: 175, status: 'pending', statusText: 'Low Stock (2 left)' },
+    { id: '3', name: 'Tata Salt (Iodized)', stock: 0, unit: 'pcs', price: 28, status: 'cancelled', statusText: 'Out of Stock' },
+  ]);
+  const [lastClickedId, setLastClickedId] = useState(null);
+
+  const handleRestockClick = (id) => {
+    setLastClickedId(id);
+    setMockProducts((prev) =>
+      prev.map((p) => {
+        if (p.id === id) {
+          const nextStock = p.stock === 0 ? 10 : p.stock + 10;
+          return {
+            ...p,
+            stock: nextStock,
+            status: 'success',
+            statusText: `${nextStock} ${p.unit} in stock`,
+          };
+        }
+        return p;
+      })
+    );
+    // Remove the flash animation class after 500ms
+    setTimeout(() => {
+      setLastClickedId(null);
+    }, 500);
+  };
+
+  // 3. Smooth Scroll Handler
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const faqData = [
+    {
+      q: 'Is BharatStock completely free to use?',
+      a: 'Yes! BharatStock is 100% free for shop owners, retail merchants, and local businesses. There are no hidden fees or payment gates.',
+    },
+    {
+      q: 'Can my staff members access the same store ledger?',
+      a: 'Yes. Once you register, you get a unique Business ID. Simply share this Business ID with your staff members, and they can log into the same shop ledger from their devices.',
+    },
+    {
+      q: 'Do I need a special thermal printer to print receipts?',
+      a: 'No. The "Print Invoice" button triggers your standard browser print dialog, which automatically scales to normal A4 paper or standard thermal receipt rolls depending on your local printer settings.',
+    },
+    {
+      q: 'Is my business data secure?',
+      a: 'Yes. BharatStock utilizes a secure multi-tenant architecture on MongoDB. Your inventory counts, client names, and sales ledgers are isolated and completely private to your login session.',
+    },
+  ];
 
   return (
     <div className="landing-shell">
       {/* Navbar */}
       <header className="landing-header">
-        <div className="landing-brand">BharatStock</div>
+        <div className="landing-brand" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ cursor: 'pointer' }}>
+          BharatStock
+        </div>
+        
+        {/* Navigation Links for Smooth Scrolling */}
+        <div className="landing-header-links">
+          <button className="link-btn" onClick={() => scrollToSection('features')}>Features</button>
+          <button className="link-btn" onClick={() => scrollToSection('steps')}>How It Works</button>
+          <button className="link-btn" onClick={() => scrollToSection('faq')}>FAQ</button>
+        </div>
+
         <nav className="landing-nav-links">
           {isLoggedIn ? (
             <button className="btn btn-primary" onClick={() => navigate('/dashboard')}>
@@ -61,38 +135,38 @@ export default function Landing() {
           )}
         </div>
 
-        {/* 3D-like Mockup Preview Box */}
+        {/* Interactive 3D Mockup Preview Box */}
         <div className="landing-mockup-wrapper">
+          <div style={{ textAlign: 'center', marginBottom: 12, fontSize: '12px', color: 'var(--text-secondary)', fontWeight: 500 }}>
+            💡 Tip: Click items below to simulate restocking!
+          </div>
           <div className="landing-mockup-card">
             <div className="mockup-header">
               <span className="mockup-dot red"></span>
               <span className="mockup-dot yellow"></span>
               <span className="mockup-dot green"></span>
-              <span className="mockup-title">Active Stock Snapshot</span>
+              <span className="mockup-title">Active Stock Simulator</span>
             </div>
             <div className="mockup-body">
-              <div className="mockup-row">
-                <span>Basmati Rice (Premium)</span>
-                <span className="pill success">120 kg in stock</span>
-                <strong>{formatINR(95)}/kg</strong>
-              </div>
-              <div className="mockup-row">
-                <span>Fortune Mustard Oil</span>
-                <span className="pill pending">Low Stock (2 left)</span>
-                <strong>{formatINR(175)}/L</strong>
-              </div>
-              <div className="mockup-row">
-                <span>Tata Salt (Iodized)</span>
-                <span className="pill cancelled">Out of Stock</span>
-                <strong>{formatINR(28)}/pcs</strong>
-              </div>
+              {mockProducts.map((p) => (
+                <div
+                  key={p.id}
+                  onClick={() => handleRestockClick(p.id)}
+                  className={`mockup-row interactive-row ${lastClickedId === p.id ? 'flash-active' : ''}`}
+                  style={{ cursor: 'pointer', transition: 'background-color 0.2s, transform 0.1s' }}
+                >
+                  <span style={{ fontWeight: 600 }}>{p.name}</span>
+                  <span className={`pill ${p.status}`}>{p.statusText}</span>
+                  <strong style={{ fontFamily: 'var(--font-mono)' }}>{formatINR(p.price)}/{p.unit}</strong>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="landing-features">
+      <section id="features" className="landing-features">
         <h2 className="section-heading">Everything You Need to Run Your Shop</h2>
         <div className="features-grid">
           <div className="feature-card">
@@ -114,7 +188,7 @@ export default function Landing() {
       </section>
 
       {/* How It Works Section */}
-      <section className="landing-steps">
+      <section id="steps" className="landing-steps">
         <h2 className="section-heading">Get Started in 3 Simple Steps</h2>
         <p className="section-subheading">Setting up BharatStock for your shop takes less than a minute.</p>
         
@@ -138,27 +212,25 @@ export default function Landing() {
       </section>
 
       {/* FAQ Section */}
-      <section className="landing-faq">
+      <section id="faq" className="landing-faq">
         <h2 className="section-heading">Frequently Asked Questions</h2>
         <p className="section-subheading">Everything you need to know about BharatStock.</p>
         
-        <div className="faq-container">
-          <div className="faq-item">
-            <h4>Is BharatStock completely free to use?</h4>
-            <p>Yes! BharatStock is 100% free for shop owners, retail merchants, and local businesses. There are no hidden fees or payment gates.</p>
-          </div>
-          <div className="faq-item">
-            <h4>Can my staff members access the same store ledger?</h4>
-            <p>Yes. Once you register, you get a unique **Business ID**. Simply share this Business ID with your staff members, and they can log into the same shop ledger from their devices.</p>
-          </div>
-          <div className="faq-item">
-            <h4>Do I need a special thermal printer to print receipts?</h4>
-            <p>No. The "Print Invoice" button triggers your standard browser print dialog, which automatically scales to normal A4 paper or standard thermal receipt rolls depending on your local printer settings.</p>
-          </div>
-          <div className="faq-item">
-            <h4>Is my business data secure?</h4>
-            <p>Yes. BharatStock utilizes a secure multi-tenant architecture on MongoDB. Your inventory counts, client names, and sales ledgers are isolated and completely private to your login session.</p>
-          </div>
+        <div className="faq-container-accordion">
+          {faqData.map((item, index) => {
+            const isOpen = activeFaq === index;
+            return (
+              <div key={index} className={`faq-accordion-item ${isOpen ? 'open' : ''}`} onClick={() => toggleFaq(index)}>
+                <div className="faq-question-bar">
+                  <h4>{item.q}</h4>
+                  <span className="faq-chevron-icon">{isOpen ? '−' : '+'}</span>
+                </div>
+                <div className="faq-answer-panel" style={{ maxHeight: isOpen ? '200px' : '0' }}>
+                  <p>{item.a}</p>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
