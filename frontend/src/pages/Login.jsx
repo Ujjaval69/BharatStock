@@ -11,6 +11,24 @@ export default function Login() {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  // 3D Parallax Tilt State
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    const card = e.currentTarget;
+    const box = card.getBoundingClientRect();
+    const x = e.clientX - box.left - box.width / 2;
+    const y = e.clientY - box.top - box.height / 2;
+    const factor = 10; // Max tilt rotation in degrees
+    const rotateX = -(y / (box.height / 2)) * factor;
+    const rotateY = (x / (box.width / 2)) * factor;
+    setTilt({ x: rotateX, y: rotateY });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -29,6 +47,10 @@ export default function Login() {
   return (
     <div className="auth-container">
       <div className="auth-visual-side">
+        {/* Glowing 3D Glass Spheres */}
+        <div className="auth-3d-sphere"></div>
+        <div className="auth-3d-sphere-secondary"></div>
+
         <div className="auth-visual-content">
           <h2 className="auth-visual-title">
             Simple. Sober.<br />
@@ -88,13 +110,28 @@ export default function Login() {
       </div>
 
       <div className="auth-form-side">
-        <div className="auth-card">
-          <h1 className="auth-brand">BharatStock</h1>
-          <p className="auth-tagline">Sign in to your shop's ledger.</p>
+        <div
+          className="auth-card"
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          style={{
+            transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+            transition: 'transform 0.08s ease-out, box-shadow 0.15s ease-out',
+            transformStyle: 'preserve-3d',
+          }}
+        >
+          <div style={{ transform: 'translateZ(40px)', transformStyle: 'preserve-3d' }}>
+            <h1 className="auth-brand">BharatStock</h1>
+            <p className="auth-tagline">Sign in to your shop's ledger.</p>
+          </div>
 
-          {error ? <div className="error-banner">{error}</div> : null}
+          {error ? (
+            <div className="error-banner" style={{ transform: 'translateZ(30px)' }}>
+              {error}
+            </div>
+          ) : null}
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} style={{ transform: 'translateZ(30px)', transformStyle: 'preserve-3d' }}>
             <div className="field">
               <label htmlFor="businessId">Business ID</label>
               <input
@@ -124,7 +161,7 @@ export default function Login() {
             </button>
           </form>
 
-          <p className="auth-switch">
+          <p className="auth-switch" style={{ transform: 'translateZ(20px)' }}>
             New shop?{' '}
             <button type="button" onClick={() => navigate('/register')}>
               Register your business

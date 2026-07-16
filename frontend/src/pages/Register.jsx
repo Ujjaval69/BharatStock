@@ -10,6 +10,24 @@ export default function Register() {
   const [submitting, setSubmitting] = useState(false);
   const [createdId, setCreatedId] = useState(null);
 
+  // 3D Parallax Tilt State
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    const card = e.currentTarget;
+    const box = card.getBoundingClientRect();
+    const x = e.clientX - box.left - box.width / 2;
+    const y = e.clientY - box.top - box.height / 2;
+    const factor = 10; // Max tilt rotation in degrees
+    const rotateX = -(y / (box.height / 2)) * factor;
+    const rotateY = (x / (box.width / 2)) * factor;
+    setTilt({ x: rotateX, y: rotateY });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
+
   const update = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
 
   const handleSubmit = async (e) => {
@@ -31,13 +49,24 @@ export default function Register() {
     return (
       <div className="auth-container">
         <div className="auth-form-side" style={{ flex: 1 }}>
-          <div className="auth-card">
-            <h1 className="auth-brand">You're set up!</h1>
-            <p className="auth-tagline">Save your Business ID — you'll need it to log in next time.</p>
-            <div className="credential-note" style={{ fontSize: 16, textAlign: 'center', margin: '20px 0' }}>
+          <div
+            className="auth-card"
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            style={{
+              transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+              transition: 'transform 0.08s ease-out, box-shadow 0.15s ease-out',
+              transformStyle: 'preserve-3d',
+            }}
+          >
+            <div style={{ transform: 'translateZ(40px)', transformStyle: 'preserve-3d' }}>
+              <h1 className="auth-brand">You're set up!</h1>
+              <p className="auth-tagline">Save your Business ID — you'll need it to log in next time.</p>
+            </div>
+            <div className="credential-note" style={{ fontSize: 16, textAlign: 'center', margin: '20px 0', transform: 'translateZ(30px)' }}>
               Business ID: <strong style={{ fontFamily: 'var(--font-mono)' }}>{createdId}</strong>
             </div>
-            <button className="btn btn-primary" style={{ width: '100%' }} onClick={() => navigate('/')}>
+            <button className="btn btn-primary" style={{ width: '100%', transform: 'translateZ(20px)' }} onClick={() => navigate('/')}>
               Go to dashboard
             </button>
           </div>
@@ -49,6 +78,10 @@ export default function Register() {
   return (
     <div className="auth-container">
       <div className="auth-visual-side">
+        {/* Floating 3D Glass Spheres */}
+        <div className="auth-3d-sphere"></div>
+        <div className="auth-3d-sphere-secondary"></div>
+
         <div className="auth-visual-content">
           <h2 className="auth-visual-title">
             Open your shop<br />
@@ -78,13 +111,28 @@ export default function Register() {
       </div>
 
       <div className="auth-form-side">
-        <div className="auth-card">
-          <h1 className="auth-brand">Register</h1>
-          <p className="auth-tagline">Set up BharatStock for your shop in a minute.</p>
+        <div
+          className="auth-card"
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          style={{
+            transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+            transition: 'transform 0.08s ease-out, box-shadow 0.15s ease-out',
+            transformStyle: 'preserve-3d',
+          }}
+        >
+          <div style={{ transform: 'translateZ(40px)', transformStyle: 'preserve-3d' }}>
+            <h1 className="auth-brand">Register</h1>
+            <p className="auth-tagline">Set up BharatStock for your shop in a minute.</p>
+          </div>
 
-          {error ? <div className="error-banner">{error}</div> : null}
+          {error ? (
+            <div className="error-banner" style={{ transform: 'translateZ(30px)' }}>
+              {error}
+            </div>
+          ) : null}
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} style={{ transform: 'translateZ(30px)', transformStyle: 'preserve-3d' }}>
             <div className="field">
               <label htmlFor="businessName">Shop name</label>
               <input id="businessName" value={form.businessName} onChange={update('businessName')} required />
@@ -117,7 +165,7 @@ export default function Register() {
             </button>
           </form>
 
-          <p className="auth-switch">
+          <p className="auth-switch" style={{ transform: 'translateZ(20px)' }}>
             Already registered?{' '}
             <button type="button" onClick={() => navigate('/login')}>
               Sign in
