@@ -884,6 +884,7 @@ a {
   z-index: 50;
   backdrop-filter: var(--glass-blur);
   box-shadow: var(--shadow);
+  transition: var(--transition);
 }
 
 .landing-brand {

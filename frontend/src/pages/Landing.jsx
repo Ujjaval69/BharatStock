@@ -7,7 +7,7 @@ function formatINR(amount) {
 }
 
 export default function Landing() {
-  const { user } = useAuth();
+  const { user, theme, toggleTheme } = useAuth();
   const navigate = useNavigate();
   const isLoggedIn = !!user;
 
@@ -89,7 +89,30 @@ export default function Landing() {
           <button className="link-btn" onClick={() => scrollToSection('faq')}>FAQ</button>
         </div>
 
-        <nav className="landing-nav-links">
+        <nav className="landing-nav-links" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          {/* Theme Toggle Button */}
+          <button
+            className="btn btn-ghost"
+            onClick={toggleTheme}
+            style={{
+              padding: 0,
+              fontSize: '16px',
+              border: '1px solid var(--border-color)',
+              borderRadius: '50%',
+              width: 36,
+              height: 36,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              background: 'var(--bg-primary)',
+              transition: 'var(--transition)'
+            }}
+            title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
+          >
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
+
           {isLoggedIn ? (
             <button className="btn btn-primary" onClick={() => navigate('/dashboard')}>
               Go to Dashboard
