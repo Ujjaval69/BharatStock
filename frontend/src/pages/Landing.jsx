@@ -35,7 +35,7 @@ export default function Landing() {
 
       {/* Hero Section */}
       <section className="landing-hero">
-        <div className="landing-hero-badge">🚀 Simple. Sober. Highly Effective.</div>
+        <div className="landing-hero-badge">⚡ The Intelligent POS & Billing Ledger for Retailers</div>
         <h1 className="landing-title">
           The Smart POS & Ledger for <br />
           <span>Modern Indian Shops</span>
@@ -91,7 +91,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Features Grid */}
+      {/* Features Section */}
       <section className="landing-features">
         <h2 className="section-heading">Everything You Need to Run Your Shop</h2>
         <div className="features-grid">
@@ -113,42 +113,67 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section className="landing-pricing">
-        <h2 className="section-heading">Simple, Transparent Pricing</h2>
-        <p className="section-subheading">Choose the plan that fits the size of your business ledger.</p>
-        <div className="pricing-grid">
-          <div className="pricing-card">
-            <h3>Starter Plan</h3>
-            <div className="price-tag">₹0<span>/month</span></div>
-            <p>Best for single-owner small local shops.</p>
-            <ul>
-              <li>✓ Manage up to 50 Products</li>
-              <li>✓ Daily Sales & Order Logging</li>
-              <li>✓ Tax Invoice Print Receipts</li>
-              <li>✓ Basic Analytics Graph</li>
-            </ul>
-            <button className="btn btn-ghost" style={{ width: '100%', marginTop: 24 }} onClick={() => navigate('/register')}>
-              Get Started Free
-            </button>
+      {/* How It Works Section */}
+      <section className="landing-steps">
+        <h2 className="section-heading">Get Started in 3 Simple Steps</h2>
+        <p className="section-subheading">Setting up BharatStock for your shop takes less than a minute.</p>
+        
+        <div className="steps-grid">
+          <div className="step-item">
+            <div className="step-number">1</div>
+            <h3>Register Your Shop</h3>
+            <p>Enter your store details and email to generate your unique **Business ID**. Save this ID to log in and connect your staff accounts.</p>
           </div>
+          <div className="step-item">
+            <div className="step-number">2</div>
+            <h3>Populate Your Inventory</h3>
+            <p>Add your products, configure categories, pricing, unit measurements, and set custom warning alerts for low stocks.</p>
+          </div>
+          <div className="step-item">
+            <div className="step-number">3</div>
+            <h3>Log Sales & Print Bills</h3>
+            <p>Select products, add customer details, auto-calculate GST tax breakdowns, and print clean invoices instantly.</p>
+          </div>
+        </div>
+      </section>
 
-          <div className="pricing-card popular">
-            <div className="popular-badge">Most Popular</div>
-            <h3>Pro Ledger</h3>
-            <div className="price-tag">₹499<span>/month</span></div>
-            <p>Best for busy shops needing multi-staff log entries.</p>
-            <ul>
-              <li>✓ **Unlimited** Products & Categories</li>
-              <li>✓ Multiple Staff Account Logins</li>
-              <li>✓ Complete Customer Directory CRM</li>
-              <li>✓ Full Sales Trend & Revenue Reporting</li>
-              <li>✓ Priority Email & Chat Support</li>
-            </ul>
-            <button className="btn btn-primary" style={{ width: '100%', marginTop: 24 }} onClick={() => navigate('/register')}>
-              Upgrade to Pro
-            </button>
+      {/* FAQ Section */}
+      <section className="landing-faq">
+        <h2 className="section-heading">Frequently Asked Questions</h2>
+        <p className="section-subheading">Everything you need to know about BharatStock.</p>
+        
+        <div className="faq-container">
+          <div className="faq-item">
+            <h4>Is BharatStock completely free to use?</h4>
+            <p>Yes! BharatStock is 100% free for shop owners, retail merchants, and local businesses. There are no hidden fees or payment gates.</p>
           </div>
+          <div className="faq-item">
+            <h4>Can my staff members access the same store ledger?</h4>
+            <p>Yes. Once you register, you get a unique **Business ID**. Simply share this Business ID with your staff members, and they can log into the same shop ledger from their devices.</p>
+          </div>
+          <div className="faq-item">
+            <h4>Do I need a special thermal printer to print receipts?</h4>
+            <p>No. The "Print Invoice" button triggers your standard browser print dialog, which automatically scales to normal A4 paper or standard thermal receipt rolls depending on your local printer settings.</p>
+          </div>
+          <div className="faq-item">
+            <h4>Is my business data secure?</h4>
+            <p>Yes. BharatStock utilizes a secure multi-tenant architecture on MongoDB. Your inventory counts, client names, and sales ledgers are isolated and completely private to your login session.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Bottom CTA Banner */}
+      <section className="landing-cta-banner">
+        <div className="cta-banner-content">
+          <h2>Ready to Digitize Your Store Ledger?</h2>
+          <p>Create your account today and experience lightning-fast stock tracking and order billing.</p>
+          <button 
+            className="btn btn-primary btn-lg" 
+            style={{ background: '#ffffff', color: '#0f172a', fontWeight: 'bold' }} 
+            onClick={() => navigate(isLoggedIn ? '/dashboard' : '/register')}
+          >
+            {isLoggedIn ? 'Go to Dashboard' : 'Open Free Account'}
+          </button>
         </div>
       </section>
 
