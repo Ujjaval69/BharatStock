@@ -1,8 +1,9 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function Sidebar() {
   const { business, user, logout, theme, toggleTheme } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <aside className="sidebar">
@@ -73,7 +74,13 @@ export default function Sidebar() {
             🌙 Dark
           </button>
         </div>
-        <button className="sidebar-logout" onClick={logout}>
+        <button
+          className="sidebar-logout"
+          onClick={() => {
+            logout();
+            navigate('/');
+          }}
+        >
           Log out
         </button>
       </div>

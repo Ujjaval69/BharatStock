@@ -58,10 +58,7 @@ export function AuthProvider({ children }) {
 
   const registerBusiness = async (payload) => {
     const data = await api.registerBusiness(payload);
-    localStorage.setItem('bs_token', data.token);
-    setToken(data.token);
-    setUser(data.user);
-    setBusiness(data.business);
+    // DO NOT save token or log in here to satisfy "when user registers he needs to login after that"
     return data.business;
   };
 
